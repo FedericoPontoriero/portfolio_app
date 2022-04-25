@@ -3,7 +3,7 @@ import { AiFillEye, AiFillGithub } from 'react-icons/ai';
 
 import { motion } from 'framer-motion';
 import { urlFor, client } from '../../client';
-import { AppWrap } from '../../wrapper';
+import { AppWrap, MotionWrap } from '../../wrapper';
 
 import './Work.scss';
 const Work = () => {
@@ -18,7 +18,19 @@ const Work = () => {
 			setfilterWork(data);
 		});
 	}, []);
-	const handleWorkFilter = () => {};
+	const handleWorkFilter = item => {
+		setActiveFilter(item);
+		setAnimateCard([{ y: 100, opacity: 0 }]);
+
+		setTimeout(() => {
+			setAnimateCard([{ y: 0, opacity: 1 }]);
+			if (item === 'All') {
+				setfilterWork(works);
+			} else {
+				setfilterWork(works.filter(work => work.tags.includes(item)));
+			}
+		}, 500);
+	};
 	return (
 		<>
 			<h2 className='head-text'>
@@ -89,4 +101,8 @@ const Work = () => {
 	);
 };
 
-export default AppWrap(Work, 'work');
+export default AppWrap(
+	MotionWrap(Work, 'app__works'),
+	'work',
+	'app__primarybg'
+);
